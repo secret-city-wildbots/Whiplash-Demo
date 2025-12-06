@@ -280,6 +280,8 @@ public class Motor {
             case SPX:
                 this.configSPX.inverted(this.motorConfig.direction == RotationDir.Clockwise);
                 this.configSPX.idleMode((this.motorConfig.brake) ? IdleMode.kBrake : IdleMode.kCoast);
+                this.configSPX.limitSwitch.forwardLimitSwitchEnabled(this.motorConfig.forwardLimitSwitchEnabled);
+                this.configSPX.limitSwitch.reverseLimitSwitchEnabled(this.motorConfig.reverseLimitSwitchEnabled);
                 this.motorSPX.configure(configSPX, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
                 break;
             case TFX:

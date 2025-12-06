@@ -20,9 +20,9 @@ public class Shooter extends SubsystemBase {
         shooterMotorRight.applyConfig();
     }
 
-    public void spinUp() {
-        shooterMotorLeft.dc(0.3);
-        shooterMotorRight.dc(0.3);
+    public void spinUp(double power) {
+        shooterMotorLeft.dc(power * 0.9);
+        shooterMotorRight.dc(power);
     }
 
     public void stop() {
