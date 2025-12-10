@@ -51,6 +51,18 @@ public class Motor {
         this.applyConfig();
     }
 
+    public Motor(int CanID, String canbus) {
+        this.CanID = CanID;
+        this.type = MotorType.TFX;
+        this.motorTFX = new TalonFX(CanID, canbus);
+        this.configTFX = new TalonFXConfiguration();
+        this.slot0TFX = new Slot0Configs();
+        this.motorTFX.getConfigurator().setPosition(0);
+
+        this.motorConfig = new MotorConfig();
+        this.applyConfig();
+    }
+
     public Motor(int CanID, MotorType type, String actuatorName) {
         this.CanID = CanID;
         this.type = type;
@@ -280,6 +292,8 @@ public class Motor {
             case SPX:
                 this.configSPX.inverted(this.motorConfig.direction == RotationDir.Clockwise);
                 this.configSPX.idleMode((this.motorConfig.brake) ? IdleMode.kBrake : IdleMode.kCoast);
+                this.configSPX.limitSwitch.forwardLimitSwitchEnabled(this.motorConfig.forwardLimitSwitchEnabled);
+                this.configSPX.limitSwitch.reverseLimitSwitchEnabled(this.motorConfig.reverseLimitSwitchEnabled);
                 this.motorSPX.configure(configSPX, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
                 break;
             case TFX:
