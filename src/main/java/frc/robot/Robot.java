@@ -25,6 +25,8 @@ public class Robot extends TimedRobot {
   public static boolean drivetrainEnabled = false;
   public static boolean kidControllerEnabled = true;
 
+  //private final LED led = new LED();
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -43,6 +45,10 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    
+    //led.updateLED();
+    //led.updateOutputs();
 
   }
 

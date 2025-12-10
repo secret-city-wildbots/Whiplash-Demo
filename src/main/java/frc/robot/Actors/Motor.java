@@ -51,6 +51,18 @@ public class Motor {
         this.applyConfig();
     }
 
+    public Motor(int CanID, String canbus) {
+        this.CanID = CanID;
+        this.type = MotorType.TFX;
+        this.motorTFX = new TalonFX(CanID, canbus);
+        this.configTFX = new TalonFXConfiguration();
+        this.slot0TFX = new Slot0Configs();
+        this.motorTFX.getConfigurator().setPosition(0);
+
+        this.motorConfig = new MotorConfig();
+        this.applyConfig();
+    }
+
     public Motor(int CanID, MotorType type, String actuatorName) {
         this.CanID = CanID;
         this.type = type;

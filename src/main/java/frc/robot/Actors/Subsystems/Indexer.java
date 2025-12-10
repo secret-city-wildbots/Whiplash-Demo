@@ -1,5 +1,7 @@
 package frc.robot.Actors.Subsystems;
 
+import com.revrobotics.spark.SparkLimitSwitch;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Actors.Motor;
 import frc.robot.Utils.MotorType;
@@ -7,6 +9,7 @@ import frc.robot.Utils.RotationDir;
 
 public class Indexer extends SubsystemBase {
     public Motor indexerMotor;
+    public final SparkLimitSwitch beamBreak = indexerMotor.motorSPX.getForwardLimitSwitch();
 
     public Indexer() {
         indexerMotor = new Motor(18, MotorType.SPX);
@@ -22,6 +25,10 @@ public class Indexer extends SubsystemBase {
     public void shoot() {
         indexerMotor.dc(0.7);
         System.out.println("GOOOOO");
+    }
+
+    public void intake() {
+        indexerMotor.dc(0.3);
     }
 
     public void stop() {

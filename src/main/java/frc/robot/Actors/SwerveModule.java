@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Robot;
 // Import Utils and Constants
 import frc.robot.Utils.MotorType;
 import frc.robot.Utils.RotationDir;
@@ -47,7 +47,7 @@ public class SwerveModule extends SubsystemBase {
         this.wheelRadius_m = wheelRadius_m;
 
         // Setup the drive motor configurations
-        this.drive = new Motor(10 + this.moduleNumber, MotorType.TFX);
+        this.drive = new Motor(10 + this.moduleNumber, "canivore");
         this.drive.motorConfig.forwardLimitSwitchEnabled = false;
         this.drive.motorConfig.reverseLimitSwitchEnabled = false;
         this.drive.motorConfig.brake = false;
@@ -59,7 +59,7 @@ public class SwerveModule extends SubsystemBase {
         this.drive.applyConfig();
 
         // Setup the azimuth motor configurations
-        this.azimuth = new Motor(20 + moduleNumber, MotorType.TFX);
+        this.azimuth = new Motor(20 + moduleNumber, "canivore");
         this.drive.motorConfig.forwardLimitSwitchEnabled = false;
         this.drive.motorConfig.reverseLimitSwitchEnabled = false;
         this.drive.motorConfig.brake = true;
@@ -152,8 +152,13 @@ public class SwerveModule extends SubsystemBase {
         driveOutput *= moduleState.angle.minus(new Rotation2d(currentAzimuthAngle_rad)).getCos();
 
         // Send the outputs to the drive and azimuth motors
-        azimuth.pos(normalAzimuthOutput_rot);
-        drive.dc(driveOutput);
+        if (Robot.drivetrainEnabled) {
+            azimuth.pos(normalAzimuthOutput_rot);
+            drive.dc(driveOutput);
+        } else {
+            azimuth.dc(0);
+            drive.dc(0);
+        }
     }
 
     /**

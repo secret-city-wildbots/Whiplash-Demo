@@ -50,7 +50,7 @@ public class Drivetrain extends SubsystemBase {
          */
 
         // pigeon
-        this.pigeon = new Pigeon2(6);
+        this.pigeon = new Pigeon2(6, "canivore");
 
         // Define the swerve modules
         // TODO: Test changing the numbers back to how we did last year. Found out how to display the swerves correctly on AdvantageScope

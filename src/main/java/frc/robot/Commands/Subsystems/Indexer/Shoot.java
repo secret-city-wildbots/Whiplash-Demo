@@ -10,9 +10,9 @@ public class Shoot extends SequentialCommandGroup {
     public Shoot(Indexer indexer, Shooter shooter) {
         addCommands(
             new Start(indexer),
+            new frc.robot.Commands.Subsystems.Shooter.Stop(shooter),
             new WaitCommand(0.5),
-            new Stop(indexer),
-            new frc.robot.Commands.Subsystems.Shooter.Stop(shooter)
+            new Stop(indexer)
         );
     }
 }

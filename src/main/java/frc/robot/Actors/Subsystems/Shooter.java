@@ -15,14 +15,16 @@ public class Shooter extends SubsystemBase {
 
         shooterMotorLeft.motorConfig.direction = RotationDir.Clockwise;
         shooterMotorRight.motorConfig.direction = RotationDir.CounterClockwise;
+        shooterMotorLeft.motorConfig.brake = false;
+        shooterMotorRight.motorConfig.brake = false;
 
         shooterMotorLeft.applyConfig();
         shooterMotorRight.applyConfig();
     }
 
     public void spinUp(double power) {
-        shooterMotorLeft.dc(power * 0.9);
-        shooterMotorRight.dc(power);
+        shooterMotorLeft.dc(power);
+        shooterMotorRight.dc(power * 0.8);
     }
 
     public void stop() {
