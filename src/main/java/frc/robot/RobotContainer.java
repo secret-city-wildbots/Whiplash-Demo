@@ -15,9 +15,12 @@ import frc.robot.Commands.Subsystems.Indexer.Shoot;
 import frc.robot.Commands.Subsystems.Indexer.Start;
 import frc.robot.Commands.Subsystems.Intake.IntakeCommand;
 import frc.robot.Commands.Subsystems.Intake.StopIntakingCommand;
+import frc.robot.Actors.Subsystems.Wrist;
 //Import Commands
 import frc.robot.Commands.Subsystems.Shooter.SpinUp;
 import frc.robot.Commands.Subsystems.Shooter.Stop;
+import frc.robot.Commands.Subsystems.Wrist.MoveToPos;
+
 
 // Import WPILib Command Libraries
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,6 +45,7 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Indexer indexer = new Indexer();
   private final Intake intake = new Intake();
+  private final Wrist wrist = new Wrist();
   // private final Drivetrain drivetrain = new Drivetrain();
 
   // Instantiate drive and manipulator Xbox Controllers
@@ -84,6 +88,10 @@ public class RobotContainer {
     driverController.leftTrigger(0.3).onTrue(new SpinUp(shooter, 0.2));
     driverController.leftTrigger(0.6).onTrue(new SpinUp(shooter, 0.3));
     driverController.leftTrigger(0.9).onTrue(new SpinUp(shooter, 0.5));
+    driverController.pov(0).onTrue(new MoveToPos(wrist, 0));
+    driverController.pov(90).onTrue(new MoveToPos(wrist, 90));
+    
+  
 
     kidController.rightTrigger(0.3)
         .onTrue(new ConditionalCommand(new SpinUp(shooter, 0.2), new InstantCommand(), () -> {
