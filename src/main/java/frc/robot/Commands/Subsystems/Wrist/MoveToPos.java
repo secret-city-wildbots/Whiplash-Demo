@@ -16,7 +16,7 @@ public class MoveToPos extends Command {
         // Assign the variables and add the subsystem as a requirement to the command
         this.wrist = wrist;
         this.angle = angle;
-        addRequirements(this.wrist);
+        addRequirements(wrist);
         }
 
     @Override
