@@ -15,9 +15,12 @@ import frc.robot.Commands.Subsystems.Indexer.Shoot;
 import frc.robot.Commands.Subsystems.Indexer.Start;
 import frc.robot.Commands.Subsystems.Intake.IntakeCommand;
 import frc.robot.Commands.Subsystems.Intake.StopIntakingCommand;
+import frc.robot.Actors.Subsystems.Wrist;
 //Import Commands
 import frc.robot.Commands.Subsystems.Shooter.SpinUp;
 import frc.robot.Commands.Subsystems.Shooter.Stop;
+import frc.robot.Commands.Subsystems.Wrist.MoveToPos;
+
 
 // Import WPILib Command Libraries
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -39,9 +42,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Shooter shooter = new Shooter();
-  private final Indexer indexer = new Indexer();
-  private final Intake intake = new Intake();
+  //private final Shooter shooter = new Shooter();
+  //private final Indexer indexer = new Indexer();
+  //private final Intake intake = new Intake();
+  private final Wrist wrist = new Wrist();
   // private final Drivetrain drivetrain = new Drivetrain();
 
   // Instantiate drive and manipulator Xbox Controllers
@@ -71,33 +75,39 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    driverController.leftBumper().onTrue(
-        new ParallelCommandGroup(new IntakeCommand(intake), new frc.robot.Commands.Subsystems.Indexer.Intake(indexer)));
-    driverController.leftBumper().onFalse(new StopIntakingCommand(intake));
-    driverController.rightBumper().onTrue(new Shoot(indexer, shooter));
+    // driverController.leftBumper().onTrue(
+    //     new ParallelCommandGroup(new IntakeCommand(intake), new frc.robot.Commands.Subsystems.Indexer.Intake(indexer)));
+    // driverController.leftBumper().onFalse(new StopIntakingCommand(intake));
+    // driverController.rightBumper().onTrue(new Shoot(indexer, shooter));
 
-    driverController.a().onTrue(new Stop(shooter));
-    driverController.b().onTrue(new SpinUp(shooter, -0.35));
-    driverController.b().onFalse(new Stop(shooter));
+    // driverController.a().onTrue(new Stop(shooter));
+    // driverController.b().onTrue(new SpinUp(shooter, -0.35));
+    // driverController.b().onFalse(new Stop(shooter));
 
-    driverController.rightTrigger(0.7).onTrue(new SpinUp(shooter, 1.0));
-    driverController.leftTrigger(0.3).onTrue(new SpinUp(shooter, 0.2));
-    driverController.leftTrigger(0.6).onTrue(new SpinUp(shooter, 0.3));
-    driverController.leftTrigger(0.9).onTrue(new SpinUp(shooter, 0.5));
+    // driverController.rightTrigger(0.7).onTrue(new SpinUp(shooter, 1.0));
+    // driverController.leftTrigger(0.3).onTrue(new SpinUp(shooter, 0.2));
+    // driverController.leftTrigger(0.6).onTrue(new SpinUp(shooter, 0.3));
+    // driverController.leftTrigger(0.9).onTrue(new SpinUp(shooter, 0.5));
+    driverController.pov(0).onTrue(new MoveToPos(wrist, 0));
+    driverController.pov(90).onTrue(new MoveToPos(wrist, 15));
+    driverController.pov(180).onTrue(new MoveToPos(wrist, 30));
+    driverController.pov(270).onTrue(new MoveToPos(wrist, 40));
+    
+  
 
-    kidController.rightTrigger(0.3)
-        .onTrue(new ConditionalCommand(new SpinUp(shooter, 0.2), new InstantCommand(), () -> {
-          return Robot.kidControllerEnabled;
-        }));
-    kidController.rightTrigger(0.6)
-        .onTrue(new ConditionalCommand(new SpinUp(shooter, 0.4), new InstantCommand(), () -> {
-          return Robot.kidControllerEnabled;
-        }));
-    kidController.rightTrigger(0.9)
-        .onTrue(new ConditionalCommand(new SpinUp(shooter, 0.6), new InstantCommand(), () -> {
-          return Robot.kidControllerEnabled;
-        }));
-    kidController.rightBumper().onTrue(new Shoot(indexer, shooter));
+    // kidController.rightTrigger(0.3)
+    //     .onTrue(new ConditionalCommand(new SpinUp(shooter, 0.2), new InstantCommand(), () -> {
+    //       return Robot.kidControllerEnabled;
+    //     }));
+    // kidController.rightTrigger(0.6)
+    //     .onTrue(new ConditionalCommand(new SpinUp(shooter, 0.4), new InstantCommand(), () -> {
+    //       return Robot.kidControllerEnabled;
+    //     }));
+    // kidController.rightTrigger(0.9)
+    //     .onTrue(new ConditionalCommand(new SpinUp(shooter, 0.6), new InstantCommand(), () -> {
+    //       return Robot.kidControllerEnabled;
+    //     }));
+    // kidController.rightBumper().onTrue(new Shoot(indexer, shooter));
 
     driverController.button(7).onTrue(new InstantCommand(() -> {
       Robot.drivetrainEnabled = false;
