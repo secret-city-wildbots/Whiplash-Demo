@@ -53,11 +53,10 @@ public class Drivetrain extends SubsystemBase {
         this.pigeon = new Pigeon2(6, "canivore");
 
         // Define the swerve modules
-        // TODO: Test changing the numbers back to how we did last year. Found out how to display the swerves correctly on AdvantageScope
         this.swerveModules = new SwerveModules(
             new SwerveModule[] {
-                new SwerveModule(1, wheelRadius_m, driveGearRatio, azimuthGearRatio, RotationDir.Clockwise),
-                new SwerveModule(0, wheelRadius_m, driveGearRatio, azimuthGearRatio, RotationDir.CounterClockwise),
+                new SwerveModule(0, wheelRadius_m, driveGearRatio, azimuthGearRatio, RotationDir.Clockwise),
+                new SwerveModule(1, wheelRadius_m, driveGearRatio, azimuthGearRatio, RotationDir.CounterClockwise),
                 new SwerveModule(2, wheelRadius_m, driveGearRatio, azimuthGearRatio, RotationDir.Clockwise),
                 new SwerveModule(3, wheelRadius_m, driveGearRatio, azimuthGearRatio, RotationDir.CounterClockwise)
             }
@@ -69,24 +68,23 @@ public class Drivetrain extends SubsystemBase {
          * of WPILib. That can be found
          * here: https://docs.wpilib.org/en/stable/docs/software/basic-programming/coordinate-system.html#coordinate-system
          */
-        // TODO: Test changing the numbers back to how we did last year. Found out how to display the swerves correctly on AdvantageScope
         this.swerveModuleLocations_m = new Translation2d[4];
-        // Module 0 should be +X and -Y (Front Right - FR)
-        this.swerveModuleLocations_m[1] = new Translation2d(
-            moduleToModuleLength_m,
-            -moduleToModuleWidth_m
-        );
-        // Module 1 should be +X and +Y (Front Left - FL)
+        // Module 0 (BL)
         this.swerveModuleLocations_m[0] = new Translation2d(
-            moduleToModuleLength_m,
-            moduleToModuleWidth_m
-        );
-        // Module 2 should be -X and +Y (Back Left - BL)
-        this.swerveModuleLocations_m[2] = new Translation2d(
             -moduleToModuleLength_m,
             moduleToModuleWidth_m
         );
-        // Module 3 should be -X and -Y (Back Right - BR)
+        // Module 1 (BR)
+        this.swerveModuleLocations_m[1] = new Translation2d(
+            moduleToModuleLength_m,
+            moduleToModuleWidth_m
+        );
+        // Module 2 (FR)
+        this.swerveModuleLocations_m[2] = new Translation2d(
+            moduleToModuleLength_m,
+            -moduleToModuleWidth_m
+        );
+        // Module 3 (FL)
         this.swerveModuleLocations_m[3] = new Translation2d(
             -moduleToModuleLength_m,
             -moduleToModuleWidth_m
@@ -98,7 +96,7 @@ public class Drivetrain extends SubsystemBase {
         // Setup the odometry tracking
         this.odometry = new SwerveDriveOdometry(
           this.swerveKinematics,
-          this.pigeon.getRotation2d().unaryMinus(),
+          this.pigeon.getRotation2d(),
           swerveModules.getPosition()
         );
     }
@@ -107,16 +105,18 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         // Update the odometry in the periodic block
         this.odometry.update(
-            this.pigeon.getRotation2d().unaryMinus(),
+            this.pigeon.getRotation2d(),
             this.swerveModules.getPosition()
         );
 
         if (!Robot.drivetrainEnabled) {
-            for (int i = 0; i < swerveModules.swerveModules.length; i++) {
-                swerveModules.swerveModules[i].drive.dc(0);
-                swerveModules.swerveModules[i].azimuth.dc(0);
+            for (SwerveModule swerveModule: swerveModules.swerveModules) {
+                swerveModule.drive.dc(0);
+                swerveModule.azimuth.dc(0);
             }
         }
+
+        System.out.println(Robot.drivetrainEnabled);
     }
 
     /**
@@ -135,7 +135,7 @@ public class Drivetrain extends SubsystemBase {
      */
     public void resetOdometry(Pose2d pose) {
         this.odometry.resetPosition(
-            this.pigeon.getRotation2d().unaryMinus(),
+            this.pigeon.getRotation2d(),
             this.swerveModules.getPosition(),    
             pose
         );
@@ -168,7 +168,7 @@ public class Drivetrain extends SubsystemBase {
                 ypow * maxGroundSpeed_mPs,
                 hpow * maxRotateSpeed_radPs,
                 // Converting pigeon from left hand rule (x+) to a right hand rule (x+)
-                this.pigeon.getRotation2d().unaryMinus()
+                this.pigeon.getRotation2d()
                 ),
                 0.020
             )

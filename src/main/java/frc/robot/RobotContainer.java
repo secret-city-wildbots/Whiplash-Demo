@@ -39,10 +39,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Shooter shooter = new Shooter();
+  /*private final Shooter shooter = new Shooter();
   private final Indexer indexer = new Indexer();
-  private final Intake intake = new Intake();
-  // private final Drivetrain drivetrain = new Drivetrain();
+  private final Intake intake = new Intake();*/
+  private final Drivetrain drivetrain = new Drivetrain();
 
   // Instantiate drive and manipulator Xbox Controllers
   private final CommandXboxController driverController = new CommandXboxController(0);
@@ -71,7 +71,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    driverController.leftBumper().onTrue(
+    /*driverController.leftBumper().onTrue(
         new ParallelCommandGroup(new IntakeCommand(intake), new frc.robot.Commands.Subsystems.Indexer.Intake(indexer)));
     driverController.leftBumper().onFalse(new StopIntakingCommand(intake));
     driverController.rightBumper().onTrue(new Shoot(indexer, shooter));
@@ -98,7 +98,7 @@ public class RobotContainer {
           return Robot.kidControllerEnabled;
         }));
     kidController.rightBumper().onTrue(new Shoot(indexer, shooter));
-
+*/
     driverController.button(7).onTrue(new InstantCommand(() -> {
       Robot.drivetrainEnabled = false;
     }));
@@ -106,11 +106,10 @@ public class RobotContainer {
       Robot.drivetrainEnabled = true;
     }));
 
-    /*
-     * drivetrain.setDefaultCommand(
-     * new TeleopDrive(drivetrain, driverController)
-     * );
-     */
+    drivetrain.setDefaultCommand(
+      new TeleopDrive(drivetrain, driverController)
+    );
+     
   }
 
   /**
