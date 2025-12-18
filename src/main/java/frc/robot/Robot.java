@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-  public static boolean drivetrainEnabled = false;
+  public static boolean drivetrainEnabled = true;
   public static boolean kidControllerEnabled = true;
 
   //private final LED led = new LED();

@@ -55,18 +55,18 @@ public class SwerveModule extends SubsystemBase {
         this.drive.motorConfig.dutyCycleOpenLoopRampPeriod = 0.4; //this one is used, as it's open loop duty cycle
         this.drive.motorConfig.direction = driveDir;
         this.drive.motorConfig.peakForwardDC = 0.3;
-        this.drive.motorConfig.peakReverseDC = 0.3;
+        this.drive.motorConfig.peakReverseDC = -0.3;
         this.drive.applyConfig();
 
         // Setup the azimuth motor configurations
         this.azimuth = new Motor(20 + moduleNumber, "canivore");
-        this.drive.motorConfig.forwardLimitSwitchEnabled = false;
-        this.drive.motorConfig.reverseLimitSwitchEnabled = false;
-        this.drive.motorConfig.brake = true;
-        this.drive.motorConfig.dutyCycleClosedLoopRampPeriod = 0.1; //this one is used, as it's a close loop pid
-        this.drive.motorConfig.dutyCycleOpenLoopRampPeriod = 0.2;
-        this.drive.motorConfig.direction = RotationDir.CounterClockwise;
-        this.drive.applyConfig();
+        this.azimuth.motorConfig.forwardLimitSwitchEnabled = false;
+        this.azimuth.motorConfig.reverseLimitSwitchEnabled = false;
+        this.azimuth.motorConfig.brake = true;
+        this.azimuth.motorConfig.dutyCycleClosedLoopRampPeriod = 0.1; //this one is used, as it's a close loop pid
+        this.azimuth.motorConfig.dutyCycleOpenLoopRampPeriod = 0.2;
+        this.azimuth.motorConfig.direction = RotationDir.CounterClockwise;
+        this.azimuth.applyConfig();
 
         // Setup the Azimuth PID
         this.azimuth.pid(0.15, 0.0, 0.0);
@@ -131,7 +131,7 @@ public class SwerveModule extends SubsystemBase {
         // Scale speed by cosine of angle error. This scales down movement perpendicular to the desired
         // direction of travel that can occur when modules change directions. This results in smoother
         // driving.
-        //moduleState.cosineScale(encoderRotation);
+        moduleState.cosineScale(encoderRotation);
 
         // Wrapping the angle to allow for "continuous input"
         double minDistance = MathUtil.angleModulus(moduleState.angle.getRadians() - azimuthAngle_rad);
@@ -147,9 +147,6 @@ public class SwerveModule extends SubsystemBase {
          */
         // Output drive
         double driveOutput = moduleState.speedMetersPerSecond / maxGroundSpeed_mPs;
-
-        // TODO: Is this the same as: moduleState.cosineScale(encoderRotation) (LINE 113)
-        driveOutput *= moduleState.angle.minus(new Rotation2d(currentAzimuthAngle_rad)).getCos();
 
         // Send the outputs to the drive and azimuth motors
         if (Robot.drivetrainEnabled) {
